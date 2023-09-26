@@ -19,10 +19,10 @@ namespace Claims.Services.Covers
 
         public class Handle : IRequestHandler<Request, Response>
         {
-            private readonly CosmosDbService _cosmosDbService;
+            private readonly ICosmosDbService _cosmosDbService;
             private readonly Auditer _auditer;
 
-            public Handle(AuditContext auditContext, CosmosDbService cosmosDbService)
+            public Handle(AuditContext auditContext, ICosmosDbService cosmosDbService)
             {
                 _auditer = new Auditer(auditContext);
                 _cosmosDbService = cosmosDbService;

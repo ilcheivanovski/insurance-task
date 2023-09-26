@@ -1,16 +1,10 @@
-using System.Configuration;
 using System.Text.Json.Serialization;
 using Claims.Infrastructure;
 using Claims.Infrastructure.CosmosDb;
-using Claims.Infrastructure.Settings;
 using Claims.Services.Claims;
-using Claims.Services.Covers;
 using FluentValidation;
-using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using static Claims.Services.Claims.CreateClaim;
 
 public partial class Program
 {
@@ -29,14 +23,13 @@ public partial class Program
         //builder.Services.AddScoped<ICosmosDbService, CosmosDbService>();
 
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateClaim>());
-        //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateCover>());
 
         builder.Services.AddValidatorsFromAssemblyContaining<CreateClaim.Validator>();
 
-        builder.Services.AddSingleton(
+        builder.Services.AddSingleton<ICosmosDbService>(
             InitializeCosmosClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 
-        builder.Services.AddSingleton(GetCosmosClient(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+        builder.Services.AddSingleton(GetCosmosClient(builder.Configuration.GetSection("CosmosDb")));
 
         builder.Services.AddDbContext<AuditContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -73,10 +66,11 @@ public partial class Program
 
         static async Task<CosmosDbService> InitializeCosmosClientInstanceAsync(IConfigurationSection configurationSection)
         {
-            string databaseName = configurationSection.GetSection("DatabaseName").Value;
-            string containerName = configurationSection.GetSection("ContainerName").Value;
-            string account = configurationSection.GetSection("Account").Value;
-            string key = configurationSection.GetSection("Key").Value;
+            string? databaseName = configurationSection.GetSection("DatabaseName").Value;
+            string? containerName = configurationSection.GetSection("ContainerName").Value;
+            string? account = configurationSection.GetSection("Account").Value;
+            string? key = configurationSection.GetSection("Key").Value;
+
             CosmosClient client = new CosmosClient(account, key);
             CosmosDbService cosmosDbService = new CosmosDbService(client, databaseName, containerName);
             DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
@@ -85,18 +79,14 @@ public partial class Program
             return cosmosDbService;
         }
 
-        static async Task<CosmosClient> GetCosmosClient(IConfigurationSection configurationSection)
+        static CosmosClient GetCosmosClient(IConfigurationSection configurationSection)
         {
-            string account = configurationSection.GetSection("Account").Value;
-            string key = configurationSection.GetSection("Key").Value;
-            return new CosmosClient(account, key, new CosmosClientOptions()
-            {
-                SerializerOptions = new CosmosSerializationOptions()
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }
+            string? databaseName = configurationSection.GetSection("DatabaseName").Value;
+            string? containerName = configurationSection.GetSection("ContainerName").Value;
+            string? account = configurationSection.GetSection("Account").Value;
+            string? key = configurationSection.GetSection("Key").Value;
 
-            });
+            return new CosmosClient(account, key);
         }
     }
 }

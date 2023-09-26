@@ -24,9 +24,9 @@ namespace Claims.Services.Claims
 
         public class Handle : IRequestHandler<Request, Response>
         {
-            private readonly CosmosDbService _cosmosDbService;
+            private readonly ICosmosDbService _cosmosDbService;
 
-            public Handle(CosmosDbService cosmosDbService)
+            public Handle(ICosmosDbService cosmosDbService)
             {
                 _cosmosDbService = cosmosDbService;
             }

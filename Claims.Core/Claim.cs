@@ -1,4 +1,6 @@
-﻿namespace Claims.Core
+﻿using Newtonsoft.Json;
+
+namespace Claims.Core
 {
     public class Claim
     {
@@ -7,7 +9,7 @@
             Id = Guid.NewGuid().ToString();
             Created = DateTime.UtcNow;
         }
-
+        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
         public string CoverId { get; set; }
         public DateTime Created { get; private set; }

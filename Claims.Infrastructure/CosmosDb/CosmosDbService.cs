@@ -5,7 +5,7 @@ using Claims.Core;
 
 namespace Claims.Infrastructure.CosmosDb
 {
-    public class CosmosDbService
+    public class CosmosDbService : ICosmosDbService
     {
         private readonly Container _container;
 
