@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims", "Claims\Claims.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{003F7774-8202-4837-8C40-72297F3876C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Tests", "Claims.Tests\Claims.Tests.csproj", "{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Tests", "Claims.Tests\Claims.Tests.csproj", "{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Core", "Claims.Core\Claims.Core.csproj", "{58571D55-16FE-492B-82AF-80EF838725F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Claims.Infrastructure", "Claims.Infrastructure\Claims.Infrastructure.csproj", "{6B9C5849-698A-4C76-ABFE-6B6BF867B56F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Claims.Services", "Claims.Services\Claims.Services.csproj", "{0D2FA190-C32E-4D55-A2FE-42333F3D04B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +29,18 @@ Global
 		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC846D1B-22B5-4CED-B0CB-778EBFEE1C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58571D55-16FE-492B-82AF-80EF838725F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58571D55-16FE-492B-82AF-80EF838725F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58571D55-16FE-492B-82AF-80EF838725F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58571D55-16FE-492B-82AF-80EF838725F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B9C5849-698A-4C76-ABFE-6B6BF867B56F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B9C5849-698A-4C76-ABFE-6B6BF867B56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B9C5849-698A-4C76-ABFE-6B6BF867B56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B9C5849-698A-4C76-ABFE-6B6BF867B56F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D2FA190-C32E-4D55-A2FE-42333F3D04B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D2FA190-C32E-4D55-A2FE-42333F3D04B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D2FA190-C32E-4D55-A2FE-42333F3D04B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D2FA190-C32E-4D55-A2FE-42333F3D04B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
