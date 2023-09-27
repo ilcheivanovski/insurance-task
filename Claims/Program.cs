@@ -25,7 +25,7 @@ public partial class Program
         {
             options.AddPolicy("LocalhostPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost")
+                builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             });
