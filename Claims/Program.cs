@@ -3,6 +3,7 @@ using Claims.Infrastructure.AuditContext;
 using Claims.Infrastructure.CosmosDb;
 using Claims.Infrastructure.Settings;
 using Claims.Services.Claims;
+using Claims.Services.Covers;
 using FluentValidation;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,16 @@ public partial class Program
             }
         );
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("LocalhostPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+
         builder.Services.AddSingleton(GetCosmosClient(builder.Configuration.GetSection("CosmosDb")));
         builder.Services.AddSingleton<CosmosDbSettings>(builder.Configuration.GetSection("CosmosDb").Get<CosmosDbSettings>());
         builder.Services.AddTransient<ICosmosDbService, CosmosDbService>();
@@ -27,7 +38,6 @@ public partial class Program
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateClaim>());
 
         builder.Services.AddValidatorsFromAssemblyContaining<CreateClaim.Validator>();
-
         builder.Services.AddDbContext<AuditContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -52,6 +62,7 @@ public partial class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.UseCors("LocalhostPolicy");
 
         using (var scope = app.Services.CreateScope())
         {

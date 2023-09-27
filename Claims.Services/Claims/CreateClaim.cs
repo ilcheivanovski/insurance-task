@@ -26,6 +26,8 @@ namespace Claims.Services.Claims
             }
         }
 
+
+
         public class Response
         {
             public string Id { get; set; }
@@ -40,15 +42,20 @@ namespace Claims.Services.Claims
         {
             private readonly ICosmosDbService _cosmosDbService;
             private readonly Auditer _auditer;
+            private readonly IValidator _validator;
 
-            public Handle(AuditContext auditContext, ICosmosDbService cosmosDbService)
+            public Handle(AuditContext auditContext, ICosmosDbService cosmosDbService, IValidator<Request> validator)
             {
                 _auditer = new Auditer(auditContext);
                 _cosmosDbService = cosmosDbService;
+                _validator = validator; // Injected validator
             }
 
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
+
+
+
                 var claim = new Claim()
                 {
                     CoverId = request.CoverId,
@@ -59,6 +66,7 @@ namespace Claims.Services.Claims
 
                 await _cosmosDbService.AddItemAsync<Claim>(claim, claim.Id);
                 _auditer.AuditClaim(claim.Id, "POST");
+
 
                 return new Response()
                 {

@@ -19,6 +19,7 @@ public class Cover
         {
             return ComputePremium(StartDate, EndDate, Type);
         }
+        set { }
     }
 
     public static decimal ComputePremium(DateOnly startDate, DateOnly endDate, CoverType coverType)
