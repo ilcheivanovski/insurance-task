@@ -1,5 +1,5 @@
 ﻿using Claims.Core;
-using Claims.Infrastructure;
+using Claims.Infrastructure.AuditContext;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
@@ -32,7 +32,7 @@ namespace Claims.Services.Covers
             public Handle(CosmosClient cosmosClient, AuditContext auditContext)
             {
                 _auditer = new Auditer(auditContext);
-                _container = cosmosClient?.GetContainer("ClaimDb", "Cover")// GET COVER IN CONSTS
+                _container = cosmosClient?.GetContainer("ClaimDb", "Cover") // GET COVER IN CONSTS
                      ?? throw new ArgumentNullException(nameof(cosmosClient));
             }
 
@@ -44,7 +44,7 @@ namespace Claims.Services.Covers
                     EndDate = request.EndDate,
                     Type = request.Type
                 };
-                await _container.CreateItemAsync(cover, new PartitionKey(cover.Id));
+                await _container.CreateItemAsync<Cover>(cover, new PartitionKey(cover.Id));
                 _auditer.AuditCover(cover.Id, "POST");
 
                 return new Response()

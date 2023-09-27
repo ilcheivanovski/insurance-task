@@ -1,5 +1,5 @@
 ﻿using Claims.Core;
-using Claims.Infrastructure;
+using Claims.Infrastructure.AuditContext;
 using Claims.Infrastructure.CosmosDb;
 using MediatR;
 
@@ -31,7 +31,7 @@ namespace Claims.Services.Covers
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
                 _auditer.AuditClaim(request.Id, "DELETE");
-                await _cosmosDbService.DeleteItemAsync(request.Id);
+                await _cosmosDbService.DeleteItemAsync<Claim>(request.Id);
 
                 return new Response();
             }

@@ -1,5 +1,6 @@
 ﻿using Claims.Core;
 using Claims.Infrastructure;
+using Claims.Infrastructure.CosmosDb;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 
@@ -23,22 +24,18 @@ namespace Claims.Services.Covers
 
         public class Handle : IRequestHandler<Request, Response>
         {
-            private readonly Container _container;
-            private readonly Auditer _auditer;
+            private readonly ICosmosDbService _cosmosDbService;
 
-            public Handle(CosmosClient cosmosClient, AuditContext auditContext)
+            public Handle(ICosmosDbService cosmosDbService)
             {
-                _auditer = new Auditer(auditContext);
-                _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
-                     ?? throw new ArgumentNullException(nameof(cosmosClient));
+                _cosmosDbService = cosmosDbService;
             }
 
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
                 try
                 {
-                    var response = await _container.ReadItemAsync<Cover>(request.Id, new(request.Id));
-                    var cover = response.Resource;
+                    var cover = await _cosmosDbService.GetItemAsync<Cover>(request.Id);
 
                     return new Response()
                     {
@@ -51,9 +48,7 @@ namespace Claims.Services.Covers
                 }
                 catch (CosmosException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    // TODO
-                    //return NotFound();
-                    throw new Exception();
+                    return null;
                 }
             }
         }

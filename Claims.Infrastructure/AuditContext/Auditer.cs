@@ -1,6 +1,6 @@
 ﻿using Claims.Core.Auditing;
 
-namespace Claims.Infrastructure
+namespace Claims.Infrastructure.AuditContext
 {
     public class Auditer
     {
@@ -23,7 +23,7 @@ namespace Claims.Infrastructure
             _auditContext.Add(claimAudit);
             _auditContext.SaveChanges();
         }
-        
+
         public void AuditCover(string id, string httpRequestType)
         {
             var coverAudit = new CoverAudit()

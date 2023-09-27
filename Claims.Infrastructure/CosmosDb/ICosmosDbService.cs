@@ -1,14 +1,10 @@
-﻿using Claims.Core;
-using System.Net;
-
-namespace Claims.Infrastructure.CosmosDb
+﻿namespace Claims.Infrastructure.CosmosDb
 {
     public interface ICosmosDbService
     {
-        Task<IEnumerable<Claim>> GetClaimsAsync();
-        Task<Claim> GetClaimAsync(string id);
-        Task AddItemAsync(Claim item);
-        //Task UpdateAsync(string id, Claim item);
-        Task DeleteItemAsync(string id);
+        Task<IEnumerable<T>> GetAllItemsAsync<T>();
+        Task<T> GetItemAsync<T>(string id);
+        Task AddItemAsync<T>(T item, string id);
+        Task DeleteItemAsync<T>(string id);
     }
 }

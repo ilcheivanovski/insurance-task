@@ -33,11 +33,12 @@ namespace Claims.Services.Claims
 
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
-                var x = await _cosmosDbService.GetClaimAsync(request.Id);
+                var x = await _cosmosDbService.GetItemAsync<Claim>(request.Id);
 
                 return new Response()
                 {
-                    CoverId = x.Id,
+                    Id = x.Id,
+                    CoverId = x.CoverId,
                     Name = x.Name,
                     Type = x.Type,
                     DamageCost = x.DamageCost,

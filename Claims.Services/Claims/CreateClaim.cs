@@ -1,5 +1,5 @@
 ﻿using Claims.Core;
-using Claims.Infrastructure;
+using Claims.Infrastructure.AuditContext;
 using Claims.Infrastructure.CosmosDb;
 using FluentValidation;
 using MediatR;
@@ -55,10 +55,9 @@ namespace Claims.Services.Claims
                     Name = request.Name,
                     Type = request.Type,
                     DamageCost = request.DamageCost,
-                    Id = Guid.NewGuid().ToString()
                 };
 
-                await _cosmosDbService.AddItemAsync(claim);
+                await _cosmosDbService.AddItemAsync<Claim>(claim, claim.Id);
                 _auditer.AuditClaim(claim.Id, "POST");
 
                 return new Response()

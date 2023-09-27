@@ -1,6 +1,8 @@
 ﻿using Claims.Core;
-using Claims.Infrastructure;
+using Claims.Infrastructure.AuditContext;
+using Claims.Infrastructure.CosmosDb;
 using MediatR;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;
 
@@ -33,37 +35,28 @@ namespace Claims.Services.Covers
 
         public class Handle : IRequestHandler<Request, Response>
         {
-            private readonly Container _container;
+            private readonly ICosmosDbService _cosmosDbService;
             private readonly Auditer _auditer;
 
-            public Handle(CosmosClient cosmosClient, AuditContext auditContext)
+            public Handle(ICosmosDbService cosmosDbService, AuditContext auditContext)
             {
                 _auditer = new Auditer(auditContext);
-                _container = cosmosClient?.GetContainer("ClaimDb", "Cover")
-                     ?? throw new ArgumentNullException(nameof(cosmosClient));
+                _cosmosDbService = cosmosDbService;
             }
+
 
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
-                var query = _container.GetItemQueryIterator<Cover>(new QueryDefinition("SELECT * FROM c"));
+                var claims = await _cosmosDbService.GetAllItemsAsync<Cover>();
 
-                var covers = new List<Response.CoverItem>();
-
-                while (query.HasMoreResults)
+                var covers = claims.Select(x => new Response.CoverItem()
                 {
-                    var response = await query.ReadNextAsync();
-
-                    var tempList = response.Select(x => new Response.CoverItem()
-                    {
-                        Id = x.Id,
-                        StartDate = x.StartDate,
-                        EndDate = x.EndDate,
-                        Premium = x.Premium,
-                        Type = x.Type
-                    }).ToList();
-
-                    covers.AddRange(tempList);
-                }
+                    Id = x.Id,
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    Premium = x.Premium,
+                    Type = x.Type
+                }).ToList();
 
                 return new Response()
                 {

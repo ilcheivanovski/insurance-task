@@ -1,4 +1,3 @@
-using Claims.Core;
 using Claims.Services.Covers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

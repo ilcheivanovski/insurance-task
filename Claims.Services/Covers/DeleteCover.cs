@@ -1,5 +1,5 @@
 ﻿using Claims.Core;
-using Claims.Infrastructure;
+using Claims.Infrastructure.AuditContext;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Newtonsoft.Json;

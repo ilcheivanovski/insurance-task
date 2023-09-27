@@ -22,7 +22,7 @@ namespace Claims.Controllers
             return _mediator.Send(new GetAllClaims.Request());
         }
 
-        [HttpPost(Name = "CreateClaim")]
+        [HttpPost]
         public async Task<CreateClaim.Response> CreateClaim([FromBody] CreateClaim.Request request)
         {
             return await _mediator.Send(request);

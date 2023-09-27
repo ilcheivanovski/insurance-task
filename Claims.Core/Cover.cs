@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Claims.Core;
 
 public class Cover
@@ -6,7 +8,7 @@ public class Cover
     {
         Id = Guid.NewGuid().ToString();
     }
-
+    [JsonProperty(PropertyName = "id")]
     public string Id { get; private set; }
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }
