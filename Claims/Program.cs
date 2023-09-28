@@ -5,6 +5,7 @@ using Claims.Infrastructure.Settings;
 using Claims.Services.Claims;
 using Claims.Services.Covers;
 using FluentValidation;
+using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,9 @@ public partial class Program
 
         builder.Services.AddSingleton(GetCosmosClient(builder.Configuration.GetSection("CosmosDb")));
         builder.Services.AddSingleton<CosmosDbSettings>(builder.Configuration.GetSection("CosmosDb").Get<CosmosDbSettings>());
+
         builder.Services.AddTransient<ICosmosDbService, CosmosDbService>();
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<CreateClaim>());
 

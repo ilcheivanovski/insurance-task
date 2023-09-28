@@ -22,7 +22,7 @@ namespace Claims.Services.Claims
         {
             public Validator()
             {
-                RuleFor(x => x.DamageCost).NotEmpty().GreaterThan(20);
+                RuleFor(x => x.DamageCost).NotEmpty().Equal(20);
             }
         }
 

@@ -3,7 +3,6 @@ using Claims.Infrastructure.AuditContext;
 using FluentValidation;
 using MediatR;
 using Microsoft.Azure.Cosmos;
-using Newtonsoft.Json;
 
 namespace Claims.Services.Covers
 {
