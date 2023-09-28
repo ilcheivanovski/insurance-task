@@ -10,8 +10,8 @@ namespace Claims.Services.Covers
     {
         public class Request : IRequest<Response>
         {
-            public DateOnly StartDate { get; set; }
-            public DateOnly EndDate { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
             public CoverType Type { get; set; }
             public decimal Premium { get; set; }
 
@@ -33,19 +33,19 @@ namespace Claims.Services.Covers
             }
         }
 
-        private static bool BeWithinOneYearRange(DateOnly startDate, DateOnly endDate)
+        private static bool BeWithinOneYearRange(DateTime startDate, DateTime endDate)
         {
             // Calculate the one-year period from the StartDate
-            DateOnly oneYearFromStart = startDate.AddYears(1);
+            DateTime oneYearFromStart = startDate.AddYears(1);
 
             // Check if EndDate is within the one-year period
             return endDate <= oneYearFromStart;
         }
 
-        private static bool NotInPast(DateOnly date)
+        private static bool NotInPast(DateTime date)
         {
             // Get the current date as a DateOnly instance
-            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Today);
+            DateTime currentDate = DateTime.Today;
 
             // Check if the provided date is not in the past
             return date >= currentDate;
@@ -76,8 +76,8 @@ namespace Claims.Services.Covers
             {
                 var cover = new Cover()
                 {
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
+                    StartDate = DateOnly.FromDateTime(request.StartDate),
+                    EndDate = DateOnly.FromDateTime(request.EndDate),
                     Type = request.Type,
                     Premium = request.Premium,
                 };

@@ -22,7 +22,7 @@ namespace Claims.Services.Claims
         {
             public Validator()
             {
-                RuleFor(x => x.DamageCost).NotEmpty().Equal(20);
+                RuleFor(x => x.DamageCost).NotEmpty();
             }
         }
 
@@ -54,7 +54,18 @@ namespace Claims.Services.Claims
             async Task<Response> IRequestHandler<Request, Response>.Handle(Request request, CancellationToken cancellationToken)
             {
 
+                var validator = new Validator();
+                var validationResult = await validator.ValidateAsync(request);
+                var relatedCover = await _cosmosDbService.GetItemAsync<Cover>(request.CoverId);
 
+                if (
+                    validationResult.IsValid && relatedCover != null &&
+                   (DateOnly.FromDateTime(request.Created) < relatedCover.StartDate ||
+                    DateOnly.FromDateTime(request.Created) > relatedCover.EndDate)
+                    )
+                {
+                    throw new FluentValidation.ValidationException(validationResult.Errors);
+                }
 
                 var claim = new Claim()
                 {
